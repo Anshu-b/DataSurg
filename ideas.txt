@@ -2,7 +2,7 @@ Plot ideas:
 
 --------------------------------------------------------------------------------------------------
 
-1. Trends in ICU Stay & Outcomes (Time-Series Chart)
+1. Trends in ICU Stay & Outcomes (Time-Series Chart) - Mehul
 
 Columns to use:
 casestart (time when case started)
@@ -25,7 +25,7 @@ It may also reveal whether higher BMI correlates with longer ICU stays or higher
 
 --------------------------------------------------------------------------------------------------
 
-2. Risk Factors Heatmap
+2. Risk Factors Heatmap -- Mehul
 
 Columns to use:
 age
@@ -51,7 +51,7 @@ If a particular factor (e.g., ASA score) has a high correlation with mortality, 
 
 --------------------------------------------------------------------------------------------------
 
-3. Predicting Surgery Outcomes (Sankey Diagram)
+3. Predicting Surgery Outcomes (Sankey Diagram) -- Jeronimo
 
 Columns to use:
 asa (ASA physical status classification)
@@ -76,7 +76,7 @@ For example, you may find that high ASA scores have a much higher chance of ICU 
 
 --------------------------------------------------------------------------------------------------
 
-4. Scatterplot of Surgery Duration vs. Patient Age, Colored by Surgery Type (By Sex)
+4. Scatterplot of Surgery Duration vs. Patient Age, Colored by Surgery Type (By Sex) -- Ansh (& Write-up)
 
 Columns
 X-axis: Patient age (age)
@@ -100,7 +100,7 @@ re videoscopic surgeries quicker than open surgeries? Do older patients undergo 
 
 --------------------------------------------------------------------------------------------------
 
-5. Interactive Bar Chart Showing Trends by Department -- Ansh (& Write-up)
+5. Interactive Bar Chart Showing Trends by Department -- Jeronimo
 
 Columns:
 
