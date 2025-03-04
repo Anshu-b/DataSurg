@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataSurge</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>DataSurg: An Exploration of Korean Surgical Data</h1>
+            <h4>Ansh Bhatnagar.</h4>
+            <h4>Jeronimo Adames-Baena.</h4>
+            <h4>Mehul Verma.</h4>
+        </div>
+    </header>
+
+    <main>
+        <section id="introduction">
+            <div class="container">
+                <h2>Introduction</h2>
+                <p>Provide an overview of the data, the goals of your project, and why the topic is important. Explain the context of the dataset you are using.</p>
+            </div>
+        </section>
+
+        <section id="visualizations">
+            <div class="container">
+                <h2>Interactive Visualizations</h2>
+                <p>Provide an explanation of each visualization and the interaction methods used. Below is the space for your D3.js visualizations.</p>
+                <p>Below is the scatterplot showing the relationship between patient age and surgery duration, with color representing the surgery approach. Use the dropdown to filter by sex.</p>
+
+                <label for="sex-filter">Filter by Sex:</label>
+                <select id="sex-filter">
+                    <option value="All">All</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+
+                <div id="scatterplot"></div>
+
+                <div id="tooltip" style="position: absolute; text-align: center; padding: 5px; background-color: white; border: 1px solid black; border-radius: 5px; opacity: 0;"></div>
+
+                <div id="graph-container">
+                    <!-- Your D3.js graphs will go here -->
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion">
+            <div class="container">
+                <h2>Conclusion</h2>
+                <p>Summarize the key takeaways from the visualizations, insights gained, and future directions or challenges.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 DSC 106 Project </p>
+        </div>
+    </footer>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="scripts/ansh.js"></script>
+</body>
+</html>
