@@ -1,0 +1,110 @@
+Plot ideas: 
+
+--------------------------------------------------------------------------------------------------
+
+1. Trends in ICU Stay & Outcomes (Time-Series Chart)
+
+Columns to use:
+casestart (time when case started)
+icu_days (number of days spent in ICU)
+death_inhosp (death during hospitalization, binary)
+bmi (to filter or color by BMI groups)
+
+Axes:
+The x-axis is casestart (binned into weeks/months).
+The y-axis is icu_days (average ICU stay in that time period).
+A second line overlays mortality rate over time.
+
+Interaction:
+Users can filter by BMI groups to see if obesity impacts ICU stays.
+Hovering over points shows specific case details.
+
+Purpose:
+This plot helps visualize whether ICU stays are increasing or decreasing over time.
+It may also reveal whether higher BMI correlates with longer ICU stays or higher mortality rates.
+
+--------------------------------------------------------------------------------------------------
+
+2. Risk Factors Heatmap
+
+Columns to use:
+age
+bmi
+preop_htn (preoperative hypertension, binary)
+preop_dm (diabetes, binary)
+asa
+icu_days or death_inhosp as the outcome.
+Plot Details:
+
+A heatmap where:
+X-axis is risk factors (preop_htn, preop_dm, bmi, age, asa).
+Y-axis is outcome categories (icu_days bins or death_inhosp).
+Color intensity represents correlation strength.
+
+Interaction:
+Hovering over a cell shows exact correlation values.
+Clicking on a factor filters other charts to show affected patient groups.
+
+Purpose:
+This would highlight the biggest risk factors for ICU stay or death.
+If a particular factor (e.g., ASA score) has a high correlation with mortality, it may be an important consideration for surgeons.
+
+--------------------------------------------------------------------------------------------------
+
+3. Predicting Surgery Outcomes (Sankey Diagram)
+
+Columns to use:
+asa (ASA physical status classification)
+optype (surgery type)
+icu_days (grouped into bins: 0 days, 1-3 days, 4+ days)
+death_inhosp
+Plot Details:
+
+A Sankey diagram where:
+The first node is asa (e.g., healthy vs. pre-existing conditions).
+The second node is optype (surgery type).
+The third node is ICU stay duration.
+The final node is survival vs. death.
+
+Interaction:
+Hovering over a flow path highlights that patient group.
+Clicking filters other charts to show details of that subgroup.
+
+Purpose:
+This visualization would reveal how ASA classification influences ICU stay and mortality.
+For example, you may find that high ASA scores have a much higher chance of ICU stays and mortality.
+
+--------------------------------------------------------------------------------------------------
+
+4. Scatterplot of Surgery Duration vs. Patient Age, Colored by Surgery Type (By Sex)
+
+Columns
+X-axis: Patient age (age)
+Y-axis: Surgery duration (opend - opstart)
+Color: Surgery approach (approach, e.g., Open, Videoscopic, etc.)
+Size (optional): BMI (bmi) – larger dots for higher BMI
+Dropdown filter: Select sex (sex column, M or F)
+
+A scatterplot where:
+The relationship is clear between patient age and surgery duration, 
+categorized by surgery type, with an interactive dropdown to filter by sex.
+
+Interaction:
+Dropdown filter: Users can pick Male (M) or Female (F), and the scatter plot updates accordingly.
+Tooltip on hover: Show details like exact age, surgery type, and duration.
+Legend for surgery type: Each type (Open, Videoscopic, etc.) will have a distinct color.
+
+Purpose:
+To answer the questions of: Does surgery duration differ significantly between males and females?
+re videoscopic surgeries quicker than open surgeries? Do older patients undergo more invasive procedures?
+
+--------------------------------------------------------------------------------------------------
+
+5. Interactive Bar Chart Showing Trends by Department -- Ansh (& Write-up)
+
+Columns:
+
+X-axis: Surgery types or disease types (optype or diagnosis).
+Y-axis: Count of surgeries performed in that department.
+Dropdown menu: Allows the user to select a department.
+Interaction: The bar chart updates dynamically when a new department is selected.
