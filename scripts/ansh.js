@@ -181,7 +181,6 @@ function updateScatterPlot(data) {
 function resampleData() {
   // Visual feedback - change button text temporarily
   const button = d3.select("#resample-button");
-  button.text("Resampling...");
   
   // Add a small delay to show the button text change
   setTimeout(() => {
