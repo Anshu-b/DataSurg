@@ -38,7 +38,7 @@ svgContainer.append("text")
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .style("font-style", "italic")
-    .text("Does your BMI truly determine your hospital outcome? Or ");
+    .text("Does your BMI truly determine your hospital outcome? Or is eating too much McDonalds going to continue for the average person?");
     
 const svgMehul = svgContainer.append("g")
     .attr("transform", `translate(${marginMehul.left},${marginMehul.top})`);
