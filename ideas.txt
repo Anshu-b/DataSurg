@@ -2,25 +2,26 @@ Plot ideas:
 
 --------------------------------------------------------------------------------------------------
 
-1. Trends in ICU Stay & Outcomes (Time-Series Chart) - Mehul
+1. Trends in ICU Stay & Outcomes By BMI (Multi-Bar Chart) - Mehul
 
 Columns to use:
-casestart (time when case started)
 icu_days (number of days spent in ICU)
 death_inhosp (death during hospitalization, binary)
 bmi (to filter or color by BMI groups)
 
 Axes:
-The x-axis is casestart (binned into weeks/months).
+The x-axis is bmi (binned into groups such as Underweight, Overweight, Obese, Normal).
 The y-axis is icu_days (average ICU stay in that time period).
-A second line overlays mortality rate over time.
+A second y-axis overlays mortality rate trends in percentage, adding more insight to deceased
+and surviving patients in the ICU.
 
 Interaction:
-Users can filter by BMI groups to see if obesity impacts ICU stays.
-Hovering over points shows specific case details.
+Users can toggle between patients who survived and who died.
+Hover tooltips for detailed insights, such as survivors and deceased counts, mortality rate percentage, and 
+many more summary statistics about the hospital data.
 
 Purpose:
-This plot helps visualize whether ICU stays are increasing or decreasing over time.
+This plot helps visualize whether BMI plays a role in ICU stays increasing or decreasing over time.
 It may also reveal whether higher BMI correlates with longer ICU stays or higher mortality rates.
 
 --------------------------------------------------------------------------------------------------
@@ -34,8 +35,8 @@ preop_htn (preoperative hypertension, binary)
 preop_dm (diabetes, binary)
 asa
 icu_days or death_inhosp as the outcome.
-Plot Details:
 
+Plot Details:
 A heatmap where:
 X-axis is risk factors (preop_htn, preop_dm, bmi, age, asa).
 Y-axis is outcome categories (icu_days bins or death_inhosp).
