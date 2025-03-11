@@ -168,3 +168,14 @@ button {
   border: 2px solid #2C3E50;
   padding: 10px;
 }
+
+#scatterplot-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#legend-container {
+  border: 2px black;
+}

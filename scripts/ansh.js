@@ -1,7 +1,7 @@
-// Set up the SVG canvas with further increased left margin for y-axis label
-const margin = { top: 40, right: 30, bottom: 80, left: 80 };
+// Set up the SVG canvas with increased left margin for y-axis label
+const margin = { top: 60, right: 30, bottom: 100, left: 100 };
 const width = 800 - margin.left - margin.right;
-const height = 600 - margin.top - margin.bottom;
+const height = 700 - margin.top - margin.bottom;
 
 const svg = d3.select("#scatterplot")
   .append("svg")
@@ -13,211 +13,206 @@ const svg = d3.select("#scatterplot")
 // Set up the dropdown filter
 const sexDropdown = d3.select("#sex-filter");
 
-// Add a resample button to the page
+// Add resample and reset buttons
 d3.select("#scatterplot")
   .insert("button", ":first-child")
   .attr("id", "resample-button")
   .attr("class", "btn")
   .style("margin-bottom", "10px")
+  .style("margin-top", "10px")
   .text("Resample Data (75 points)")
   .on("click", resampleData);
 
-// Store our full dataset
+d3.select("#scatterplot")
+  .insert("button", ":first-child")
+  .attr("id", "reset-button")
+  .attr("class", "btn")
+  .style("margin-bottom", "10px")
+  .style("margin-top", "10px")
+  .style("margin-right", "10px")
+  .text("Show Full Dataset")
+  .on("click", resetData);
+
+// Store datasets
 let fullData = [];
 let sampledData = [];
+let currentData = [];
 const sampleSize = 75;
 
-// Helper function to convert minutes to days
+// Convert minutes to days function
 function minutesToDays(minutes) {
-  return minutes / (24 * 60); // 24 hours * 60 minutes
+  return minutes / (24 * 60);
 }
 
-// Define the updateScatterPlot function
+// Update scatter plot function
 function updateScatterPlot(data) {
+  currentData = data; // Track the current dataset
   const selectedSex = sexDropdown.property("value");
-
   const filteredData = data.filter(d => d.sex === selectedSex || selectedSex === "All");
 
-  // Set up the scales for the axes
+  // Define scales
   const xScale = d3.scaleLinear()
     .domain([d3.min(filteredData, d => d.age) - 5, d3.max(filteredData, d => d.age) + 5])
     .range([0, width]);
 
-  // Convert surgery duration from minutes to days for the y-scale
   const yScale = d3.scaleLinear()
     .domain([0, d3.max(filteredData, d => minutesToDays(d.opend - d.opstart))])
     .range([height, 0]);
 
-  // Set up the color scale for surgery approach
-  const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+    const colorMap = {
+      "Open": "#1f77b4",
+      "Videoscopic": "#ff7f0e",
+      "Robotic": "#2ca02c"
+  };  
 
   // Clear previous plot
   svg.selectAll("*").remove();
 
-  // Add plot title
+  // Add title
   svg.append("text")
     .attr("x", width / 2)
     .attr("y", -margin.top / 2)
     .attr("text-anchor", "middle")
-    .style("font-size", "20px")
+    .style("font-size", "22px")
     .style("font-weight", "bold")
     .text("Relationship Between Patient Age, Surgery Duration, and Approach");
 
-  // Add the X and Y axes
+  // Add axes
   svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(xScale));
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xScale))
+      .selectAll("line, path") // Axis lines
+      .style("stroke-width", "3px");
 
+  svg.selectAll(".tick text")  // Separate selection for tick labels
+      .style("font-size", "14px")
+      .style("fill", "black");
+
+
+  // Add y-axis
   svg.append("g")
-    .call(d3.axisLeft(yScale)
-      .tickFormat(d => d.toFixed(3))); // Format to 3 decimal places for days
+      .call(d3.axisLeft(yScale).tickFormat(d => d.toFixed(3)))
+      .selectAll("line, path") // Axis lines
+      .style("stroke-width", "3px");
 
-  // Add axis labels
+  // Increase tick label size
+  svg.selectAll(".tick text") // Separate selection for tick labels
+      .style("font-size", "14px")
+      .style("fill", "black");
+
+
+  // Add axis labels with larger font
   svg.append("text")
-    .attr("transform", "translate(" + (width / 2) + "," + (height + 30) + ")")
+    .attr("transform", "translate(" + (width / 2) + "," + (height + 60) + ")")
     .style("text-anchor", "middle")
-    .text("Age")
-    .attr("y", -margin.top + 50)
-    .style("font-size", "16px");
+    .style("font-size", "20px")
+    .text("Age");
 
-  // Further improved y-axis label positioning
   svg.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", -margin.left + 10) // Move it more to the right (closer to the axis)
+    .attr("y", -margin.left + 10)
     .attr("x", -(height / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .style("font-size", "16px") // Ensure font size is reasonable
+    .style("font-size", "20px")
     .text("Surgery Duration (days)");
 
-  // Create the scatterplot points
-  const circles = svg.selectAll("circle")
-    .data(filteredData, d => d.age);
-
-  circles.enter().append("circle")
-    .merge(circles)
+  // Scatterplot points
+  svg.selectAll("circle")
+    .data(filteredData)
+    .enter().append("circle")
     .attr("cx", d => xScale(d.age))
     .attr("cy", d => yScale(minutesToDays(d.opend - d.opstart)))
-    .attr("r", d => Math.sqrt(d.bmi) * 2) // Size by BMI
-    .style("fill", d => colorScale(d.approach))
+    .attr("r", d => Math.sqrt(d.bmi) * 2)
+    .style("fill", d => colorMap[d.approach])
     .style("opacity", 0.7)
     .on("mouseover", function(event, d) {
       d3.select(this).style("stroke", "black").style("stroke-width", 2);
-
       const tooltip = d3.select("#tooltip");
       tooltip.transition().duration(200).style("opacity", .9);
-      
       const durationMinutes = d.opend - d.opstart;
       const durationDays = minutesToDays(durationMinutes).toFixed(3);
-      
       tooltip.html(`Age: ${d.age}<br>Surgery Type: ${d.approach}<br>Duration: ${durationDays} days (${durationMinutes} mins)`)
         .style("left", (event.pageX + 5) + "px")
         .style("top", (event.pageY - 28) + "px");
     })
     .on("mouseout", function() {
       d3.select(this).style("stroke", "none");
-
       const tooltip = d3.select("#tooltip");
       tooltip.transition().duration(500).style("opacity", 0);
     });
-
-    // Get the approaches for the legend
-    const approaches = Array.from(new Set(filteredData.map(d => d.approach)));
-    
-    // Calculate a wider legend width based on the longest approach name
-    const maxApproachLength = Math.max(...approaches.map(a => a.length));
-    const legendWidth = Math.max(160, maxApproachLength * 10); // At least 160px, or wider for long names
-    const legendHeight = approaches.length * 25 + 40; // More height per item + padding for title
-    
-    // Add legend background and border - positioned further right
-    svg.append("rect")
-      .attr("x", width - legendWidth - 10)
-      .attr("y", 10)
-      .attr("width", legendWidth)
-      .attr("height", legendHeight)
-      .attr("rx", 5) // Rounded corners
-      .attr("ry", 5)
-      .style("fill", "#f8f9fa") // Light background
-      .style("stroke", "#dee2e6") // Border color
-      .style("stroke-width", 1.5)
-      .style("opacity", 0.9);
-    
-    // Add legend title
-    svg.append("text")
-      .attr("x", width - legendWidth / 2 - 10)
-      .attr("y", 25)
-      .attr("text-anchor", "middle")
-      .style("font-weight", "bold")
-      .style("font-size", "12px")
-      .text("Surgery Approach");
-    
-    // Add legend items with increased vertical spacing
-    const legend = svg.append("g")
-      .attr("transform", "translate(" + (width - legendWidth + 15) + ", 40)");
-
-    const legendItems = legend.selectAll(".legend")
-      .data(approaches)
-      .enter().append("g")
-      .attr("class", "legend")
-      .attr("transform", (d, i) => "translate(0," + i * 25 + ")"); // Increased spacing between items
-
-    legendItems.append("rect")
-      .attr("width", 16)
-      .attr("height", 16)
-      .attr("rx", 2) // Slightly rounded corners for color boxes
-      .attr("ry", 2)
-      .style("fill", colorScale);
-
-    legendItems.append("text")
-      .attr("x", 24)
-      .attr("y", 8)
-      .attr("dy", ".35em")
-      .style("text-anchor", "start")
-      .style("font-size", "12px")
-      .text(d => d);
 }
 
-// Function to resample data
+// Resample function
 function resampleData() {
-  // Visual feedback - change button text temporarily
-  const button = d3.select("#resample-button");
-  
-  // Add a small delay to show the button text change
-  setTimeout(() => {
-    // Resample the data
-    sampledData = d3.shuffle(fullData).slice(0, sampleSize);
-    
-    // Update the plot with new sample
-    updateScatterPlot(sampledData);
-    
-    // Reset button text
-    button.text("Resample Data (75 points)");
-  }, 300);
+  sampledData = d3.shuffle(fullData).slice(0, sampleSize);
+  updateScatterPlot(sampledData);
+}
+
+// Reset function
+function resetData() {
+  updateScatterPlot(fullData);
 }
 
 // Load data from CSV
 d3.csv("data/hospital-data.csv").then(function(data) {
-  // Convert necessary columns to appropriate data types
   data.forEach(d => {
     d.age = +d.age;
     d.opstart = +d.opstart;
     d.opend = +d.opend;
     d.bmi = +d.bmi;
-    d.approach = d.approach;
-    d.sex = d.sex;
   });
 
-  // Store the full dataset
   fullData = data;
-  
-  // Get initial sample
   sampledData = d3.shuffle(fullData).slice(0, sampleSize);
+  currentData = fullData;
 
-  // Initial setup for scatterplot
-  updateScatterPlot(sampledData);
+  // Default to showing full dataset
+  updateScatterPlot(fullData);
 
   // Update scatterplot when the dropdown filter changes
   sexDropdown.on("change", function() {
-    updateScatterPlot(sampledData);
+    updateScatterPlot(currentData);
   });
 });
+
+
+function createLegend() {
+  const legendContainer = d3.select("#legend-container");
+
+  // Clear any existing legend
+  legendContainer.html("");
+
+  const approaches = ["Open", "Videoscopic", "Robotic"]; // Replace with actual labels
+  const colors = d3.schemeCategory10.slice(0, approaches.length);
+
+  const legend = legendContainer.append("div")
+      .style("display", "flex")
+      .style("justify-content", "center")
+      .style("align-items", "center")
+      .style("border", "2px solid black")
+      .style("border-radius", "8px") 
+      .style("padding", "10px") 
+      .style("gap", "20px")
+      .style("margin-top", "10px"); 
+
+  approaches.forEach((approach, i) => {
+      const legendItem = legend.append("div")
+          .style("display", "flex")
+          .style("align-items", "center")
+          .style("gap", "15px");
+
+      legendItem.append("div") // Colored circle
+          .style("width", "12px")
+          .style("height", "12px")
+          .style("border-radius", "50%")
+          .style("background-color", colors[i]);
+
+      legendItem.append("span") // Label
+          .style("font-size", "20px")
+          .text(approach);
+  });
+}
+
+// Call the function after the chart loads
+createLegend();
