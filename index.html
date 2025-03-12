@@ -21,16 +21,37 @@
     <main>
         <section id="introduction">
             <div class="container">
-                <h2>Introduction</h2>
-                <p>Provide an overview of the data, the goals of your project, and why the topic is important. Explain the context of the dataset you are using.</p>
+                
             </div>
         </section>
 
+
         <section id="visualizations">
             <div class="container">
-                <h2>Interactive Visualizations</h2>
-                <p>Provide an explanation of each visualization and the interaction methods used. Below is the space for your D3.js visualizations.</p>
-                <p>Below is the scatterplot showing the relationship between patient age and surgery duration, with color representing the surgery approach. Use the dropdown to filter by sex.</p>
+                
+                <div id="tooltip" style="position: absolute; text-align: center; padding: 5px; background-color: white; border: 1px solid black; border-radius: 5px; opacity: 0;"></div>
+                
+                <hr> <!-- Black line added here -->
+                
+                <div id="graph-container"> </div>
+
+                <hr> <!-- Black line added here -->
+                
+    
+                <div id="heatmap-container"> </div>
+
+                <hr> <!-- Black line added here -->
+
+                <h2>Predicting Surgery Outcomes (Sankey Diagram)</h2>
+                <div id="sankey-vis"></div>
+
+                <hr> <!-- Black line added here -->
+
+                <h2>Interactive Bar Chart Showing Trends by Department</h2>
+                <div id="controls"></div>
+                <div id="BarChart"></div>
+
+                <hr> <!-- Black line added here -->
 
                 <label for="sex-filter">Filter by Sex:</label>
                 <select id="sex-filter">
@@ -43,43 +64,13 @@
                     <div id="scatterplot"></div>
                     <div id="legend-container"></div>
                 </div>
-                
-
-                <div id="tooltip" style="position: absolute; text-align: center; padding: 5px; background-color: white; border: 1px solid black; border-radius: 5px; opacity: 0;"></div>
-                
-                <h3>BMI, ICU Stay, and Mortality Rates</h3>
-                <p>Explore this multi-bar graph to analyze how BMI categories relate to ICU stay length and 
-                    mortality/survival rates. Hover over the respective bars for detailed insights, such as survivors and deceased counts, mortality rate percentage, and 
-                    many more summary statistics about the hospital data. Toggle between deceased and surviving patients in the bottom-right hand corner to see the bars update
-                    dynamically, with the blue bar showing average ICU stay days and the red bar showing the mortality rate in percentage for those patients.
-                </p>
-                <div id="graph-container">
-                    <!-- BMI visualization will go here -->
-                </div>
-                
-                <h3>Risk Factor Analysis</h3>
-                <p>This heatmap, constructed with a 2x2 matrix type design, shows the correlation between patient risk factors and clinical outcomes. The diverging purple-green color scale shows a stronger correlation associated with a darker color.
-                    Hover over each cell to identify a specific relationship between patient characteristics and their respective clinical outcomes, its respective Pearson's r correlation value, and a brief description of the strength of the two variables
-                    being measured. Click to see the cell dynamically update the gradient with more depth, as well as shadowing the other cells to divert focus from them, and explore more information about the patient group analyzed for that specific cell, as well as a brief footnote about the filtering processes involved
-                    with the data.  
-                </p>
-                <div id="heatmap-container">
-                    <!-- Heatmap visualization will go here -->
-                </div>
-
-                <h2>Predicting Surgery Outcomes (Sankey Diagram)</h2>
-                <div id="sankey-vis"></div>
-
-                <h2>Interactive Bar Chart Showing Trends by Department</h2>
-                <div id="controls"></div>
-                <div id="BarChart"></div>
             </div>
+
         </section>
 
         <section id="conclusion">
             <div class="container">
-                <h2>Conclusion</h2>
-                <p>Summarize the key takeaways from the visualizations, insights gained, and future directions or challenges.</p>
+                
             </div>
         </section>
 

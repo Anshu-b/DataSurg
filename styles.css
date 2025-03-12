@@ -179,3 +179,10 @@ button {
 #legend-container {
   border: 2px black;
 }
+
+hr {
+  border: 0;
+  height: 4px;
+  background-color: black;
+  margin: 20px 20px;
+}
