@@ -10,12 +10,15 @@ const x = d3.scaleBand().range([0, widthMehul]).padding(0.2);
 const yICU = d3.scaleLinear().range([heightMehul, 0]);
 const yMortality = d3.scaleLinear().range([heightMehul, 0]);
 
-// Define axes
-const xAxis = d3.axisBottom(x);
-const yAxisLeft = d3.axisLeft(yICU);
+// Define axes with enhanced visibility
+const xAxis = d3.axisBottom(x)
+    .tickSize(-6);
+const yAxisLeft = d3.axisLeft(yICU)
+    .tickSize(-6);
 const yAxisRight = d3.axisRight(yMortality)
     .ticks(5) // Dynamically updated tick marks based on data distribution
-    .tickFormat(d3.format(".1%")); // Format with one decimal place
+    .tickSize(-6)
+    .tickFormat(d => d3.format(".0%")(d)); // Changed to show as whole percentages
 
 // Append SVG container
 const svgContainer = d3.select("#graph-container").append("svg")
@@ -119,32 +122,60 @@ d3.csv("data/hospital-data.csv").then(data => {
         // Remove old elements before redrawing the chart
         svgMehul.selectAll("*").remove();
 
-        // Add Axes
+        // Add horizontal grid lines for ICU days
+        svgMehul.append("g")
+            .attr("class", "grid-lines")
+            .style("stroke", "#e0e0e0")
+            .style("stroke-dasharray", "3,3")
+            .style("stroke-opacity", 0.7)
+            .selectAll("line")
+            .data(yICU.ticks(5))
+            .enter()
+            .append("line")
+            .attr("x1", 0)
+            .attr("x2", widthMehul)
+            .attr("y1", d => yICU(d))
+            .attr("y2", d => yICU(d));
+
+        // Add Axes with enhanced visibility
         svgMehul.append("g")
             .attr("transform", `translate(0, ${heightMehul})`)
-            .call(xAxis);
+            .call(xAxis)
+            .style("font-size", "12px")
+            .style("font-weight", "bold")
+            .call(g => g.select(".domain").attr("stroke-width", 2)); // Make axis line thicker
 
         svgMehul.append("g")
-            .call(yAxisLeft);
+            .call(yAxisLeft)
+            .style("font-size", "12px")
+            .style("font-weight", "bold")
+            .call(g => g.select(".domain").attr("stroke-width", 2)); // Make axis line thicker
 
         svgMehul.append("g")
             .attr("transform", `translate(${widthMehul}, 0)`)
-            .call(yAxisRight);
+            .call(yAxisRight)
+            .style("font-size", "12px")
+            .style("font-weight", "bold")
+            .call(g => g.select(".domain").attr("stroke-width", 2)); // Make axis line thicker
 
-        // Add Axis Labels
+        // Add Axis Labels with increased size and visibility
         svgMehul.append("text")
             .attr("class", "x-axis-label")
             .attr("x", widthMehul / 2)
             .attr("y", heightMehul + marginMehul.bottom - 10)
             .attr("text-anchor", "middle")
+            .attr("font-weight", "bold")
+            .style("font-size", "16px") // Larger font
             .text("BMI Group");
 
         svgMehul.append("text")
             .attr("class", "y-axis-label")
             .attr("transform", "rotate(-90)")
-            .attr("y", -marginMehul.left + 20)  // Adjusted to prevent cutting off
+            .attr("y", -marginMehul.left + 30)  // Adjusted to prevent cutting off
             .attr("x", -heightMehul / 2)
             .attr("text-anchor", "middle")
+            .attr("font-weight", "bold")
+            .style("font-size", "16px") // Larger font
             .text("Average ICU Days");
 
         // Fix for the right y-axis label
@@ -152,9 +183,11 @@ d3.csv("data/hospital-data.csv").then(data => {
             .attr("class", "y-axis-label")
             .attr("transform", "rotate(90)")
             .attr("x", heightMehul / 2)  // Vertical center of the y-axis
-            .attr("y", -widthMehul - marginMehul.right + 40)  // Position to the right of the chart
+            .attr("y", -widthMehul - marginMehul.right + 30)  // Position to the right of the chart
             .attr("text-anchor", "middle")
-            .text("Mortality Rate (%)");
+            .attr("font-weight", "bold")
+            .style("font-size", "16px") // Larger font
+            .text(showSurvivors ? "Survival Rate (%)" : "Mortality Rate (%)");
 
         // Add Bars (ICU Days - Blue)
         svgMehul.selectAll(".bar-icu")
@@ -252,14 +285,15 @@ d3.csv("data/hospital-data.csv").then(data => {
 });
 
 // Viz 2 - Risk Factors Heatmap
-const marginHM = { top: 200, right: 80, bottom: 80, left: 120 }; // Further increased top margin to 200px
-const widthHM = 800 - marginHM.left - marginHM.right;
-const heightHM = 500 - marginHM.top - marginHM.bottom;
+const marginHM = { top: 200, right: 100, bottom: 100, left: 160 }; // Adjusted margins
+const widthHM = 1000 - marginHM.left - marginHM.right; // Increased width
+const heightHM = 600 - marginHM.top - marginHM.bottom; // Increased height
 
 // Create SVG container for heatmap - increase the overall height
 const svgHeatmapContainer = d3.select("#heatmap-container").append("svg")
     .attr("width", widthHM + marginHM.left + marginHM.right)
-    .attr("height", heightHM + marginHM.top + marginHM.bottom + 40); // Added 40px extra height
+    .attr("height", heightHM + marginHM.top + marginHM.bottom + 60) // Added extra height
+    .attr("style", "margin: 0 auto; display: block;"); // Center the SVG in its container
 
 // Add title to the heatmap SVG with proper positioning and spacing
 svgHeatmapContainer.append("text")
@@ -380,23 +414,24 @@ d3.csv("data/hospital-data.csv").then(data => {
     const xHM = d3.scaleBand()
         .domain(riskFactors)
         .range([0, widthHM])
-        .padding(0.05);
+        .padding(0.1); // Increased padding for better visibility
     
     const yHM = d3.scaleBand()
         .domain(outcomes)
         .range([0, heightHM])
-        .padding(0.05);
+        .padding(0.1); // Increased padding for better visibility
     
-    // Add factor labels (x-axis)
+    // Add factor labels (x-axis) with larger text
     svgHeatmap.selectAll(".factor-label")
         .data(riskFactors)
         .enter()
         .append("text")
         .attr("class", "factor-label")
         .attr("x", d => xHM(d) + xHM.bandwidth() / 2)
-        .attr("y", -10)
+        .attr("y", -15) // More distance from chart
         .attr("text-anchor", "middle")
-        .style("font-size", "12px")
+        .style("font-size", "16px") // Further increased from 14px
+        .style("font-weight", "bold")
         .text(d => {
             // Format the labels to be more readable
             const labels = {
@@ -409,17 +444,18 @@ d3.csv("data/hospital-data.csv").then(data => {
             return labels[d];
         });
     
-    // Add outcome labels (y-axis)
+    // Add outcome labels (y-axis) with larger text
     svgHeatmap.selectAll(".outcome-label")
         .data(outcomes)
         .enter()
         .append("text")
         .attr("class", "outcome-label")
-        .attr("x", -10)
+        .attr("x", -20) // More distance from chart
         .attr("y", d => yHM(d) + yHM.bandwidth() / 2)
         .attr("text-anchor", "end")
         .attr("dominant-baseline", "middle")
-        .style("font-size", "12px")
+        .style("font-size", "16px") // Further increased from 14px
+        .style("font-weight", "bold")
         .text(d => {
             const labels = {
                 "icu_days": "ICU Stay Duration",
@@ -440,7 +476,7 @@ d3.csv("data/hospital-data.csv").then(data => {
         .attr("height", yHM.bandwidth())
         .style("fill", d => colorScale(d.correlation))
         .style("stroke", "white")
-        .style("stroke-width", 1);
+        .style("stroke-width", 2); // Increased from 1
     
     // Add correlation values to cells
     svgHeatmap.selectAll(".correlation-text")
@@ -452,7 +488,7 @@ d3.csv("data/hospital-data.csv").then(data => {
         .attr("y", d => yHM(d.outcome) + yHM.bandwidth() / 2)
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
-        .style("font-size", "12px")
+        .style("font-size", "14px") // Increased from 12px
         .style("fill", d => Math.abs(d.correlation) > 0.4 ? "white" : "black")
         .text(d => d.correlation.toFixed(2));
     
@@ -508,7 +544,7 @@ d3.csv("data/hospital-data.csv").then(data => {
             // Restore original cell styles
             d3.select(this)
                 .style("stroke", "white")
-                .style("stroke-width", 1);
+                .style("stroke-width", 2);
             
             // Hide tooltip
             heatmapTooltip.transition()
@@ -594,13 +630,13 @@ d3.csv("data/hospital-data.csv").then(data => {
             // Add close button functionality
             d3.select("#close-info").on("click", function() {
                 d3.select("#info-panel").remove();
-                d3.selectAll(".heatmap-cell").style("opacity", 1).style("stroke", "white").style("stroke-width", 1);
+                d3.selectAll(".heatmap-cell").style("opacity", 1).style("stroke", "white").style("stroke-width", 2);
             });
         });
     
     // Add legend
-    const legendWidth = 250;
-    const legendHeight = 20;
+    const legendWidth = 350; // Increased legend width
+    const legendHeight = 25; // Increased legend height
     
     // Update legend to use the actual data range
     const legendX = d3.scaleLinear()
@@ -616,7 +652,7 @@ d3.csv("data/hospital-data.csv").then(data => {
         .tickValues(tickValues);
     
     const legend = svgHeatmap.append("g")
-        .attr("transform", `translate(${(widthHM - legendWidth) / 2}, ${heightHM + 40})`);
+        .attr("transform", `translate(${(widthHM - legendWidth) / 2}, ${heightHM + 50})`);
     
     // Create a gradient for the legend
     const defs = svgHeatmap.append("defs");
@@ -648,10 +684,13 @@ d3.csv("data/hospital-data.csv").then(data => {
         .attr("height", legendHeight)
         .style("fill", "url(#correlation-gradient)");
     
-    // Add the legend axis
+    // Add the legend axis with bolder styling
     legend.append("g")
         .attr("transform", `translate(0, ${legendHeight})`)
-        .call(legendXAxis);
+        .call(legendXAxis)
+        .style("font-size", "12px")
+        .style("font-weight", "bold")
+        .call(g => g.select(".domain").attr("stroke-width", 2)); // Make axis line thicker
     
     // Add legend title with more vertical spacing
     legend.append("text")
@@ -667,13 +706,13 @@ d3.csv("data/hospital-data.csv").then(data => {
         .attr("x", 0)
         .attr("y", legendHeight + 35)
         .attr("text-anchor", "middle")
-        .style("font-size", "10px")
+        .style("font-size", "12px")
         .text("Negative");
     
     legend.append("text")
         .attr("x", legendWidth)
         .attr("y", legendHeight + 35)
         .attr("text-anchor", "middle")
-        .style("font-size", "10px")
+        .style("font-size", "12px")
         .text("Positive");
 });
