@@ -17,9 +17,9 @@ const stageDescriptions = {
 };
 const asaDescriptions = {
   "ASA 1": "A normal, healthy patient.",
-  "ASA 2": "A patient with mild systemic disease (e.g., well-controlled hypertension or diabetes).",
-  "ASA 3": "A patient with severe systemic disease that is not life-threatening (e.g., poorly controlled hypertension, morbid obesity).",
-  "ASA 4": "A patient with severe systemic disease that is a constant threat to life (e.g., unstable angina, end-stage renal disease).",
+  "ASA 2": "A patient with mild systemic disease.",
+  "ASA 3": "A patient with severe systemic disease.",
+  "ASA 4": "A patient with severe systemic disease that is a constant threat to life.",
   "ASA 5": "A moribund patient who is not expected to survive without the operation.",
   "ASA 6": "A brain-dead patient whose organs are being removed for donation."
 };
@@ -48,7 +48,7 @@ d3.csv("data/hospital-data.csv").then(function(data) {
   function addNode(stage, name) {
     const key = stage + "_" + name;
     if (!(key in nodeMap)) {
-      const node = { name: name, stage: stage };
+      const node = { name, stage };
       nodeMap[key] = nodes.length;
       nodes.push(node);
     }
@@ -93,8 +93,8 @@ d3.csv("data/hospital-data.csv").then(function(data) {
     })
     .extent([[1, 1], [width - 1, height - 6]]);
   const graph = {
-    nodes: nodes.map(d => Object.assign({}, d)),
-    links: links.map(d => Object.assign({}, d))
+    nodes: nodes.map(d => ({ ...d })),
+    links: links.map(d => ({ ...d }))
   };
   sankeyGenerator(graph);
   const svg = d3.select("#sankey-vis").append("svg")
@@ -127,9 +127,6 @@ d3.csv("data/hospital-data.csv").then(function(data) {
     .on("mouseout", function() {
       d3.select(this).style("stroke-opacity", 0.25);
       tooltip.transition().duration(500).style("opacity", 0);
-    })
-    .on("click", function(event, d) {
-      console.log("working", d);
     });
   const node = svg.append("g")
     .selectAll("g")
@@ -178,29 +175,46 @@ d3.csv("data/hospital-data.csv").then(function(data) {
       tooltip.transition().duration(500).style("opacity", 0);
     });
   node.append("text")
-    .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
-    .attr("y", d => (d.y1 + d.y0) / 2 + 5)
+    .attr("x", d => (d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6))
+    .attr("y", d => ((d.y1 + d.y0) / 2) + 5)
     .attr("dy", "0.35em")
-    .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
+    .attr("text-anchor", d => (d.x0 < width / 2 ? "start" : "end"))
     .attr("pointer-events", "none")
     .text(d => d.name);
 });
 
-// Visualization 2 bar
+// Visualization 2 
 
-const marginBar = { top: 20, right: 20, bottom: 60, left: 60 };
-const widthBar = 600 - marginBar.left - marginBar.right;
-const heightBar = 400 - marginBar.top - marginBar.bottom;
+
+d3.select("#controls")
+  .style("text-align", "center")
+  .style("margin-bottom", "10px");
+d3.select("#BarChart")
+  .style("margin", "0 auto")
+  .style("background", "rgb(245,240,230)")
+  .style("border", "2px solid #2C3E50")
+  .style("padding", "10px")
+  .style("display", "block")
+  .style("width", "854px");
+
+const containerWidth = 854;
+const containerHeight = 569;
+const margin2 = { top: 20, right: 20, bottom: 60, left: 60 };
+const width2 = containerWidth - margin2.left - margin2.right;
+const height2 = containerHeight - margin2.top - margin2.bottom;
+
 const svgBarChart = d3.select("#BarChart")
   .append("svg")
-  .attr("width", widthBar + marginBar.left + marginBar.right)
-  .attr("height", heightBar + marginBar.top + marginBar.bottom)
+  .attr("width", containerWidth)
+  .attr("height", containerHeight)
   .append("g")
-  .attr("transform", `translate(${marginBar.left},${marginBar.top})`);
-const xScale = d3.scaleBand().range([0, widthBar]).padding(0.1);
-const yScale = d3.scaleLinear().range([heightBar, 0]);
+  .attr("transform", `translate(${margin2.left},${margin2.top})`);
+
+const xScale = d3.scaleBand().range([0, width2]).padding(0.1);
+const yScale = d3.scaleLinear().range([height2, 0]);
+
 const xAxisGroup = svgBarChart.append("g")
-  .attr("transform", `translate(0, ${heightBar})`);
+  .attr("transform", `translate(0, ${height2})`);
 const yAxisGroup = svgBarChart.append("g");
 
 d3.csv("data/hospital-data.csv").then(data => {
@@ -215,18 +229,12 @@ d3.csv("data/hospital-data.csv").then(data => {
     return countB - countA;
   });
   xScale.domain(sortedTypes);
-  const maxCountFirstDept = d3.max(Array.from(firstDeptCounts.values()));
+  const maxCountFirstDept = d3.max(Array.from(firstDeptCounts.values())) || 0;
   yScale.domain([0, maxCountFirstDept]);
   const deptColor = d3.scaleOrdinal()
     .domain(departments)
     .range(["#a57db5", "#67a3cb", "#64c28c", "#d3766c"]);
-  
-  xAxisGroup.call(d3.axisBottom(xScale))
-    .selectAll("text")
-    .attr("transform", "rotate(-45)")
-    .attr("text-anchor", "end");
-  yAxisGroup.call(d3.axisLeft(yScale));
-  
+
   d3.select("#controls")
     .selectAll("button")
     .data(departments)
@@ -242,7 +250,13 @@ d3.csv("data/hospital-data.csv").then(data => {
       d3.select(this).classed("active", true);
       updateChart(d, deptColor(d));
     });
-  
+
+  xAxisGroup.call(d3.axisBottom(xScale))
+    .selectAll("text")
+    .attr("transform", "rotate(-45)")
+    .attr("text-anchor", "end");
+  yAxisGroup.call(d3.axisLeft(yScale));
+
   function updateChart(selectedDept, color) {
     const filteredData = data.filter(d => d.department === selectedDept);
     const countsMap = d3.rollup(filteredData, v => v.length, d => d.optype);
@@ -253,18 +267,18 @@ d3.csv("data/hospital-data.csv").then(data => {
       .attr("class", "bar")
       .attr("x", d => xScale(d[0]))
       .attr("width", xScale.bandwidth())
-      .attr("y", heightBar)
+      .attr("y", height2)
       .attr("height", 0)
       .merge(bars)
       .transition().duration(500)
       .attr("x", d => xScale(d[0]))
       .attr("width", xScale.bandwidth())
-      .attr("y", d => heightBar - Math.max(heightBar - yScale(d[1]), 3))
-      .attr("height", d => Math.max(heightBar - yScale(d[1]), 3))
+      .attr("y", d => height2 - Math.max(height2 - yScale(d[1]), 3))
+      .attr("height", d => Math.max(height2 - yScale(d[1]), 3))
       .attr("fill", color);
     bars.exit()
       .transition().duration(500)
-      .attr("y", heightBar)
+      .attr("y", height2)
       .attr("height", 0)
       .remove();
     const labels = svgBarChart.selectAll(".label").data(counts, d => d[0]);
@@ -272,7 +286,7 @@ d3.csv("data/hospital-data.csv").then(data => {
       .append("text")
       .attr("class", "label")
       .attr("x", d => xScale(d[0]) + xScale.bandwidth() / 2)
-      .attr("y", heightBar - 5)
+      .attr("y", height2 - 5)
       .attr("text-anchor", "middle")
       .attr("fill", "#2C3E50")
       .attr("font-weight", d => d[1] !== 0 ? "bold" : "normal")
@@ -280,15 +294,15 @@ d3.csv("data/hospital-data.csv").then(data => {
       .merge(labels)
       .transition().duration(500)
       .attr("x", d => xScale(d[0]) + xScale.bandwidth() / 2)
-      .attr("y", d => (heightBar - Math.max(heightBar - yScale(d[1]), 3)) - 5)
+      .attr("y", d => (height2 - Math.max(height2 - yScale(d[1]), 3)) - 5)
       .attr("font-weight", d => d[1] !== 0 ? "bold" : "normal")
       .text(d => d[1]);
     labels.exit()
       .transition().duration(500)
-      .attr("y", heightBar)
+      .attr("y", height2)
       .remove();
   }
-  
+
   if (departments.length > 0) {
     d3.selectAll(".dept-btn").filter((d, i) => i === 0).classed("active", true);
     updateChart(departments[0], deptColor(departments[0]));
