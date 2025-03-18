@@ -184,5 +184,8 @@ hr {
   border: 0;
   height: 4px;
   background-color: black;
-  margin: 20px 20px;
+}
+
+main {
+  padding: 40px;
 }

@@ -27,24 +27,92 @@
     <main>
         <section id="introduction">
             <div class="container">
-                <h2>Preface</h2>
-                <p>In the fast-paced world of surgery, every decision that a surgeon makes carries significant weight, which ultimately makes the patient’s world hang in balance between life and death.<br><br>
-                    But what if there was a way to transform this chaotic environment into one of clarity and precision?
-                    What if there was a tool that could help surgeons make better, more informed decisions and improve patient outcomes? <br><br>
-                    That's where our project, DataSurg, comes in.<br><br>
-                    Therefore, to make our aspirations successful and bring it onto the main stage, we’ve compiled and analyzed data from a leading hospital system in South Korea.
-                    Through our innovative interactive data visualizations, we’ve created a way to turn complex surgical data into something more accessible and actionable.
-                    This dataset ultimately is the bridge between a happy family and improved healthcare around the world, providing a comprehensive look at surgical outcomes.
-                    Featuring a range of visualizations designed to uncover critical patterns and relationships, these insights can help optimize surgical decision-making, personalize patient care, and enhance hospital efficiency.</p>
+                <hr width="100%">
+                <h2>Introduction</h2>
+                <p>
+                    Imagine stepping into a bustling hospital: the air is thick with urgency, doctors are running around being chased by nurses, and patients are hurriedly rushed on stretchers. In the fast-paced world of surgery, every decision carries life-altering consequences. One wrong move could mean the difference between life and death. On the other hand, loved ones of patients are worried sick, trying their best to find out if the person they love will survive and what their condition may entail.
+                </p>
+                <p> 
+                    What if we could replace this chaos with more clarity? What if data could empower surgeons to make smarter, faster, and better decisions? That's where our project - DataSurg - comes in. By analyzing real-world surgical data from a leading South Korean hospital, we've built interactive visualizations that turn complex data into actionable insights. 
+                </p>
+                <p> 
+                    This isn't just theory: it's a real-world solution. With just a few clicks, both surgeons and patients can access critical information on survival rates, recovery times, and surgical risks. This project is comprehensive in the world of healthcare, a bridge to life-saving decisions that can transform the medical world for years to come.
+                </p>
             </div>
         </section>
 
         <section id="visualizations">
             <div class="container">
-                <h2>Interactive Visualizations</h2>
-                <p>Below is the scatterplot showing the relationship between patient age and surgery duration, with color representing the surgery approach.<br><br>
-                    Use the dropdown to filter by sex.</p>
+                <hr width="100%">
+                <h2>BMI, ICU Stay, and Mortality Rates</h2>
+                <p>
+                    Picture yourself in an ICU, surrounded by beeping monitors and medical teams racing to save lives all around you as you drift in and out of your subconscious sleep. One of the biggest assumptions in medicine that professionals have come to terms with  is that higher BMI equates to worse survival odds. 
+                </p>
+                <p>
+                    But does the data support this?
+                    Our multi-bar chart here uncovers a surprising revelation: being underweight, not overweight, is associated with the longest ICU stays. This challenges conventional wisdom and forces us to reconsider patient vulnerability by asking the most important questions. Why do frail patients struggle more in recovery? What interventions can hospitals introduce to improve outcomes for these patients? This visualization isn't just numbers on a screen: it serves a roadmap to rethinking critical care.
+                </p>
                 
+                
+                <div id="tooltip" style="position: absolute; text-align: center; padding: 5px; background-color: white; border: 1px solid black; border-radius: 5px; opacity: 0;"></div>
+                
+                <div id="graph-container"></div>
+
+                <p>
+                    Explore this multi-bar graph to analyze how BMI categories relate to ICU stay length and mortality/survival rates. Hover over the respective bars for detailed insights, such as survivors and deceased counts, mortality rate percentage, and many more summary statistics about the hospital data. Toggle between deceased and surviving patients in the bottom-right-hand corner to see the bars update dynamically, with the blue bar showing average ICU stay days and the red bar showing the mortality rate in percentage for those patients.
+                </p>
+                
+                <br>
+                <hr width="100%">
+                <h2>Risk Factor Analysis</h2>
+                <p>
+                    What if we could now predict a patient's surgical outcome based on their pre-existing conditions? 
+                </p>
+                <p>
+                    Our risk analysis heatmap is designed for exactly that. Using a dynamic purple-green scale, we expose key correlations between patient characteristics and clinical outcomes. Hovering over a cell reveals its real-world impact with correlation of two main groups, ICU stay and the hospital mortality rate: one could also make the conclusion that other extraneous factors such as smoking history, comorbidities, and even minor risk factors can significantly alter a patient's odds. This plot is a giant step towards an eminent future where this data helps individuals proactively adjust their lifestyle and diet before they ever step foot in an operating room. People with underlying health conditions can easily look at this heatmap and change themselves accordingly based on their specific problems.
+                </p>
+                
+                <div id="heatmap-container"></div>
+
+                <p>
+                    This heatmap, constructed with a 2x2 matrix-type design, shows the correlation between patient risk factors and clinical outcomes.
+                    The diverging purple-green color scale shows a stronger correlation associated with a darker color. Hover over each cell to identify a specific relationship between patient characteristics and their respective clinical outcomes, its respective Pearson's r correlation value, and a brief description of the strength of the two variables being measured. Click to see the cell dynamically update the gradient with more depth, as well as shadowing the other cells to divert focus from them.
+                </p>
+                
+                <br>
+                <hr width="100%">
+                <h2>Predicting Surgery Outcomes RoadMap</h2>
+                <p>
+                    Surgery is never just a single event: it's a journey that the common person has to endure at some point in their lives. Patients enter the hospital with unique medical histories, and every factor, from pre-existing conditions to procedure type, influences their path to recovery. But what if we could actually see these pathways in action?
+                </p>
+                <p>
+                    Our Sankey diagram transforms complex patient data into a dynamic, flow-based visualization. Instantly, patterns emerge: how specific risk factors funnel into different surgical outcomes. With a glance, surgeons and medical professionals can gauge how a patient's characteristics come together to shape their recovery, helping them refine surgical strategies and anticipate potential complications before the first incision.  
+                </p>
+
+                <div id="sankey-vis"></div>
+
+                <hr width="100%">
+                <h2>Departmental Trends</h2>
+
+                <p> 
+                    But understanding patient flow is just one piece of the puzzle. How do hospitals allocate their resources effectively? That's where our departmental bar chart comes in. This visualization reveals which surgeries dominate each department, painting a very clear picture of workload distribution. Click on the different departments and watch as the bar graph changes dynamically, targeting all the possible ranges of the human body.
+                </p>
+                
+                <div id="controls"></div>
+                <div id="BarChart"></div>
+
+                <br>
+                <br>
+                <hr width="100%">
+                <h2>Past Data - Scattered</h2>
+
+                <p> 
+                    Finally, our scatterplot ties in our purpose and mission together: it ultimately brings surgical data to life, mapping surgery duration, patient age, and surgical approach by gender. This interactive visualization helps both patients and surgeons make informed decisions about procedure options.
+                </p>
+                <p> 
+                    One key insight? Robotic surgeries (green) tend to have longer ICU stays than videoscopic surgeries (orange). With this knowledge, a patient given the choice might opt for a videoscopic approach to minimize recovery time.
+                </p>
+
                 <label for="sex-filter">Filter by Sex:</label>
                 <select id="sex-filter">
                     <option value="All">All</option>
@@ -56,48 +124,50 @@
                     <div id="scatterplot"></div>
                     <div id="legend-container"></div>
                 </div>
-                
-                <div id="tooltip" style="position: absolute; text-align: center; padding: 5px; background-color: white; border: 1px solid black; border-radius: 5px; opacity: 0;"></div>
-                
-                <h3>BMI, ICU Stay, and Mortality Rates</h3>
-                <p>Explore this multi-bar graph to analyze how BMI categories relate to ICU stay length and mortality/survival rates.<br><br>
-                    Hover over the respective bars for detailed insights, such as survivors and deceased counts, mortality rate percentage, and many more summary statistics about the hospital data.<br><br>
-                    Toggle between deceased and surviving patients in the bottom-right-hand corner to see the bars update dynamically, with the blue bar showing average ICU stay days and the red bar showing the mortality rate in percentage for those patients.</p>
-                
-                <div id="graph-container"></div>
-                
-                <h3>Risk Factor Analysis</h3>
-                <p>This heatmap, constructed with a 2x2 matrix-type design, shows the correlation between patient risk factors and clinical outcomes.<br><br>
-                    The diverging purple-green color scale shows a stronger correlation associated with a darker color.<br><br>
-                    Hover over each cell to identify a specific relationship between patient characteristics and their respective clinical outcomes, its respective Pearson's r correlation value, and a brief description of the strength of the two variables being measured.<br><br>
-                    Click to see the cell dynamically update the gradient with more depth, as well as shadowing the other cells to divert focus from them.</p>
-                
-                <div id="heatmap-container"></div>
-                
-                <h2>Predicting Surgery Outcomes (Sankey Diagram)</h2>
-                <div id="sankey-vis"></div>
-                
-                <h2>Interactive Bar Chart Showing Trends by Department</h2>
-                <div id="controls"></div>
-                <div id="BarChart"></div>
+
+                <p> 
+                    Resample this data to reveal the same trends for 75 random male, female, or all patients if you'd like. Simply click on the full dataset button to bring back the whole dataset for a more generalized trend of the different surgery approaches against patient age and gender.
+                </p>
+                <p>
+                    This visualization is a fitting accomplishment for our whole drive for this project: it turns past surgical data into actionable insights, empowering smarter, data-driven decisions in the operating room. Surgeons are now able to analyze past trends and formulate hypotheses about common questions that they may not have had answers to in the past: determine what surgeries, say take the longest time, or what surgeries are not advisable to give to people in the older age bracket due to its lengthy duration.
+                </p>
             </div>
+
+            
         </section>
 
         <section id="conclusion">
             <div class="container">
-                <h2>Conclusion/Takeaways</h2>
-                <p>The key takeaway? Data-driven insights have the power to revolutionize surgical decision-making, ultimately improving patient outcomes and enhancing healthcare efficiency.
-                By transforming complex surgical data into intuitive and interactive visualizations, we hold the keys to empowering both surgeons and patients to make informed choices that can directly impact patients and their personal as well as professional lives.<br><br>
-                    The caveat, however?<br><br>
-                    While our work lays the groundwork for AI-driven advancements in healthcare, some challenges such as data privacy and real-time integration still exist.
-                    That's why to unlock the full potential of surgical data, continued innovation and collaboration will be essential.
-                    More people will have to contribute in an open-source fashion, prospering and driving progress in the world of healthcare.</p>
+                <hr width="100%">
+                <h2>Takeaways</h2>
+                <p>
+                    Our visualizations are more than just simple visualizations made using the D3 library in JavaScript: they develop a bridge between raw data and life-saving surgical precision. By transforming complex medical records into interactive insights, we empower surgeons with the clarity they need to make critical, informed decisions in high-stakes environments. From analyzing BMI and ICU stays to identifying key risk factors and predicting surgical outcomes, our data-driven approach ensures that every piece of information is not just available, but actionable.
+                </p>
+                <p>
+                    As surgical advancements continue to evolve, harnessing the power of data will be the key to optimizing procedures, reducing risks, and personalizing patient care like never before. With every insight uncovered from our project, we act in our best efforts to take another step toward a smarter, more precise, and more effective future for surgeons in the professional medical field.
+                </p>
+                <br> 
+                <hr width="100%">
+                <div style="text-align: center;">
+                    <h3> Interested in finding out more? Watch Our Walkthrough <a href="https://youtu.be/lae1DP-I_bE">Video!</a></h3>
+                    <iframe width="760" height="415" 
+                            src="https://www.youtube.com/embed/lae1DP-I_bE" 
+                            title="YouTube video player"
+                            frameborder="0"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+        </iframe>
             </div>
+
+
         </section>
 
     </main>
 
-    <footer></footer>
+    <footer>
+        <p>&copy; 2025 DataSurge (Ansh Bhatnagar, Jeronimo Adames-Baena, Mehul Verma). </p>
+    </footer>
 
     <script type="module" src="scripts/jero.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
